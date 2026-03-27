@@ -14,10 +14,10 @@ DZinsights is a high-performance Business Intelligence (BI) platform tailored fo
 - **Anomaly Detection**: Real-time identification of transactional or operational outliers.
 - **Model Registry**: Performance monitoring and tracking for all deployed ML models.
 
-## 📸 Interface & Captures d'écran
+## Interface & Captures d'écran
 
 <details>
-<summary><b>🖼️ Voir la galerie complète de l'application (Cliquez pour dérouler)</b></summary>
+<summary><b> Voir la galerie complète de l'application (Cliquez pour dérouler)</b></summary>
 <br>
 
 <p align="center">
