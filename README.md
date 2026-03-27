@@ -14,6 +14,31 @@ DZinsights is a high-performance Business Intelligence (BI) platform tailored fo
 - **Anomaly Detection**: Real-time identification of transactional or operational outliers.
 - **Model Registry**: Performance monitoring and tracking for all deployed ML models.
 
+## 📸 Interface & Captures d'écran
+
+<details>
+<summary><b>🖼️ Voir la galerie complète de l'application (Cliquez pour dérouler)</b></summary>
+<br>
+
+<p align="center">
+  <img src="public/screenshots/image.png" width="48%" />
+  <img src="public/screenshots/image%20copy.png" width="48%" />
+  <img src="public/screenshots/image%20copy%202.png" width="48%" />
+  <img src="public/screenshots/image%20copy%203.png" width="48%" />
+  <img src="public/screenshots/image%20copy%204.png" width="48%" />
+  <img src="public/screenshots/image%20copy%205.png" width="48%" />
+  <img src="public/screenshots/image%20copy%206.png" width="48%" />
+  <img src="public/screenshots/image%20copy%207.png" width="48%" />
+  <img src="public/screenshots/image%20copy%208.png" width="48%" />
+  <img src="public/screenshots/image%20copy%209.png" width="48%" />
+  <img src="public/screenshots/image%20copy%2010.png" width="48%" />
+  <img src="public/screenshots/image%20copy%2011.png" width="48%" />
+  <img src="public/screenshots/image%20copy%2012.png" width="48%" />
+  <img src="public/screenshots/image%20copy%2013.png" width="48%" />
+  <img src="public/screenshots/image%20copy%2014.png" width="48%" />
+</p>
+</details>
+
 ## Tech Stack
 
 - **Frontend**: Next.js 16 (App Router), React 19, Tailwind CSS.
