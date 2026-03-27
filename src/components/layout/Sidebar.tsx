@@ -109,17 +109,15 @@ export function Sidebar({ currentPage, onPageChange, isCollapsed, onToggle }: Si
         <div className="flex items-center justify-between h-16 px-4 border-b border-slate-700/50">
           {!isCollapsed ? (
             <div className="flex items-center gap-3">
-              <div className="bg-emerald-500 p-2 rounded-xl">
-                <Activity className="h-5 w-5 text-white" />
-              </div>
+              <img src="/logo.png" alt="DZinsights Logo" className="h-8 w-auto object-contain" />
               <div>
                 <span className="font-bold text-lg text-white tracking-tight">DZinsights</span>
                 <p className="text-[10px] text-slate-400 font-medium">Business Intelligence</p>
               </div>
             </div>
           ) : (
-            <div className="mx-auto bg-emerald-500 p-2 rounded-xl">
-              <Activity className="h-4 w-4 text-white" />
+            <div className="mx-auto">
+              <img src="/logo.png" alt="Logo" className="h-8 w-auto object-contain" />
             </div>
           )}
           <Button

@@ -267,7 +267,7 @@ export function CustomersPage() {
   const [churnDistribution, setChurnDistribution] = useState<ChurnDistribution[]>([]);
   const [churnStats, setChurnStats] = useState({
     high_risk_count: 0,
-    revenue_at_risk_eur: 0,
+    revenue_at_risk_da: 0,
     threshold: 0.7
   });
   const [loading, setLoading] = useState(true);
@@ -314,7 +314,7 @@ export function CustomersPage() {
         setChurnDistribution(data.distribution || []);
         setChurnStats({
           high_risk_count: data.high_risk_count || 0,
-          revenue_at_risk_eur: data.revenue_at_risk_eur || 0,
+          revenue_at_risk_da: data.revenue_at_risk_da || 0,
           threshold: data.threshold || 0.7
         });
         setLoading(false);
@@ -329,7 +329,7 @@ export function CustomersPage() {
         setChurnDistribution(mockDistribution);
         setChurnStats({
           high_risk_count: 42500,
-          revenue_at_risk_eur: 36125000,
+          revenue_at_risk_da: 36125000,
           threshold: 0.7
         });
         setLoading(false);
@@ -393,7 +393,7 @@ export function CustomersPage() {
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-sm text-muted-foreground">Revenue at Risk</div>
-                <div className="text-2xl font-bold text-red-500">{(churnStats.revenue_at_risk_eur / 1000000).toFixed(1)}M DA</div>
+                <div className="text-2xl font-bold text-red-500">{(churnStats.revenue_at_risk_da / 1000000).toFixed(1)}M DA</div>
               </div>
               <TrendingDown className="h-8 w-8 text-red-500" />
             </div>
@@ -460,7 +460,7 @@ export function CustomersPage() {
                 </div>
                 <div className="text-right">
                   <div className="text-lg font-bold text-red-500">
-                    {(churnStats.revenue_at_risk_eur / 1000000).toFixed(1)}M DA
+                    {(churnStats.revenue_at_risk_da / 1000000).toFixed(1)}M DA
                   </div>
                   <div className="text-xs text-muted-foreground">at risk</div>
                 </div>

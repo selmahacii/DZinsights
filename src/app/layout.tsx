@@ -28,6 +28,9 @@ export const metadata: Metadata = {
     title: "DZinsights - Business Intelligence pour E-commerce",
     description: "Intelligence business en temps réel pour e-commerce algérien.",
   },
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({

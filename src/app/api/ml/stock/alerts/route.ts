@@ -6,7 +6,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const limit = parseInt(searchParams.get('limit') || '50');
   
-  const alerts = [];
+  const alerts: any[] = [];
   
   for (let i = 0; i < limit; i++) {
     const urgencyIndex = i < 10 ? 0 : i < 25 ? 1 : 2;
@@ -21,7 +21,7 @@ export async function GET(request: Request) {
                           urgency === 'MEDIUM' ? Math.floor(Math.random() * 4) + 4 :
                           Math.floor(Math.random() * 7) + 8;
     
-    const price = 20 + Math.random() * 480;
+    const price = 2500 + Math.random() * 60000; // Algerian Dinar price range
     
     alerts.push({
       product_id: `PRD-${String(i + 1).padStart(5, '0')}`,
@@ -33,7 +33,7 @@ export async function GET(request: Request) {
       recommended_restock_qty: Math.floor(125 + Math.random() * 75),
       urgency_level: urgency,
       holding_cost_daily: Math.round(stock * price * 0.6 * 0.001 * 100) / 100,
-      stockout_revenue_risk_eur: Math.round(price * daysToStockout * 5 * 100) / 100,
+      stockout_revenue_risk_da: Math.round(price * daysToStockout * 5 * 100) / 100,
       ml_confidence: Math.round((0.85 + Math.random() * 0.13) * 100) / 100
     });
   }

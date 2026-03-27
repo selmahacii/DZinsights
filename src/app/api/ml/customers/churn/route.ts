@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const distribution = [];
+  const distribution: any[] = [];
   
   for (let i = 0; i < 20; i++) {
     const binStart = i * 0.05;
@@ -17,7 +17,7 @@ export async function GET() {
   
   const highRiskCount = distribution.slice(14).reduce((s, d) => s + d.count, 0);
   
-  const topAtRisk = [];
+  const topAtRisk: any[] = [];
   for (let i = 0; i < 20; i++) {
     topAtRisk.push({
       customer_id: `CUS-${'*'.repeat(6)}${String(i + 1).padStart(2, '0')}`,
@@ -32,7 +32,7 @@ export async function GET() {
   return NextResponse.json({
     distribution,
     high_risk_count: highRiskCount,
-    revenue_at_risk_eur: Math.round(highRiskCount * 850 * 100) / 100,
+    revenue_at_risk_da: Math.round(highRiskCount * 850 * 120 * 100) / 100, // Converted to DZD
     top_20_at_risk_customers: topAtRisk,
     threshold: 0.7,
     model_metrics: {

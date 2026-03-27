@@ -25,7 +25,7 @@ interface StockAlert {
   recommended_restock_qty: number;
   urgency_level: 'CRITICAL' | 'MEDIUM' | 'LOW';
   holding_cost_daily: number;
-  stockout_revenue_risk_eur: number;
+  stockout_revenue_risk_da: number;
   ml_confidence: number;
 }
 
@@ -268,12 +268,12 @@ export function StockPage() {
             recommended_restock_qty: 125,
             urgency_level: urgency,
             holding_cost_daily: Math.random() * 50 + 10,
-            stockout_revenue_risk_eur: urgency === 'CRITICAL' ? Math.random() * 50000 + 20000 : 
-                                      Math.random() * 20000 + 5000,
+            stockout_revenue_risk_da: urgency === 'CRITICAL' ? Math.random() * 5000000 + 2000000 : 
+                                      Math.random() * 2000000 + 500000,
             ml_confidence: 0.85 + Math.random() * 0.13
           };
         });
-        setAlerts(mockAlerts);
+        setAlerts(mockAlerts as any); // using any for missing type property stockout_revenue_risk_eur temporarily unless types are updated
         setLoading(false);
       });
     
@@ -310,7 +310,7 @@ export function StockPage() {
       return order[a.urgency_level] - order[b.urgency_level];
     }
     if (sortBy === 'risk') {
-      return b.stockout_revenue_risk_eur - a.stockout_revenue_risk_eur;
+      return (b as any).stockout_revenue_risk_da - (a as any).stockout_revenue_risk_da;
     }
     return a.days_to_stockout - b.days_to_stockout;
   });
@@ -318,7 +318,7 @@ export function StockPage() {
   const criticalCount = alerts.filter(a => a.urgency_level === 'CRITICAL').length;
   const mediumCount = alerts.filter(a => a.urgency_level === 'MEDIUM').length;
   const totalRisk = alerts.filter(a => a.urgency_level === 'CRITICAL')
-    .reduce((sum, a) => sum + a.stockout_revenue_risk_eur, 0);
+    .reduce((sum, a) => sum + ((a as any).stockout_revenue_risk_da || a.stockout_revenue_risk_eur || 0), 0);
   
   return (
     <div className="space-y-6">
@@ -361,7 +361,7 @@ export function StockPage() {
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-sm text-muted-foreground">Revenue at Risk</div>
-                <div className="text-2xl font-bold">€{(totalRisk / 1000).toFixed(0)}K</div>
+                <div className="text-2xl font-bold">{(totalRisk / 1000000).toFixed(1)}M DA</div>
               </div>
               <DollarSign className="h-8 w-8 text-red-500" />
             </div>
@@ -438,7 +438,7 @@ export function StockPage() {
                   <th className="text-right py-3 px-3">Days to Stockout</th>
                   <th className="text-right py-3 px-3">Recommended</th>
                   <th className="text-center py-3 px-3">Urgency</th>
-                  <th className="text-right py-3 px-3">Risk (€)</th>
+                  <th className="text-right py-3 px-3">Risk (DA)</th>
                   <th className="text-right py-3 px-3">Confidence</th>
                 </tr>
               </thead>
@@ -469,7 +469,7 @@ export function StockPage() {
                       </Badge>
                     </td>
                     <td className="text-right py-3 px-3 font-mono">
-                      €{alert.stockout_revenue_risk_eur.toLocaleString()}
+                      {((alert as any).stockout_revenue_risk_da || alert.stockout_revenue_risk_eur || 0).toLocaleString()}
                     </td>
                     <td className="text-right py-3 px-3">
                       <span className="text-emerald-500">{(alert.ml_confidence * 100).toFixed(0)}%</span>
