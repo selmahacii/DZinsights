@@ -1,0 +1,220 @@
+// ML Analytics E-commerce Platform - Database Schema
+// Supports 127 metrics per transaction, ML model registry, and real-time analytics
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Core transaction table with 127 derived metrics
+model Transaction {
+  id                String   @id @default(cuid())
+  transactionId     String   @unique
+  customerId        String
+  productId         String
+  category          String
+  timestamp         DateTime
+  amount            Float
+  quantity          Int
+  discountPct       Float    @default(0)
+  paymentMethod     String
+  deviceType        String
+  country           String
+  returnFlag        Boolean  @default(false)
+  sessionDurationSec Int
+  
+  // 127 derived metrics stored as JSON blob
+  metricsJson       String   // JSON string with all 127 metrics
+  
+  // Key extracted metrics for querying
+  pageViews         Int      @default(0)
+  addToCartTime     Int      @default(0)
+  scrollDepth       Float    @default(0)
+  referralSource    String   @default("")
+  abTestVariant     String   @default("")
+  cartAbandonmentFlag Boolean @default(false)
+  couponUsed        Boolean  @default(false)
+  deliveryMethod    String   @default("")
+  reviewScore       Float?
+  
+  createdAt         DateTime @default(now())
+  
+  @@index([timestamp])
+  @@index([customerId])
+  @@index([productId])
+  @@index([category])
+}
+
+model Product {
+  id                String   @id @default(cuid())
+  productId         String   @unique
+  name              String
+  category          String
+  price             Float
+  costPrice         Float
+  stockLevel        Int
+  restockThreshold  Int
+  leadTimeDays      Int
+  supplierId        String
+  seasonalityIndex  Float    @default(0.5)
+  isPerishable      Boolean  @default(false)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@index([category])
+  @@index([stockLevel])
+}
+
+model Customer {
+  id                  String   @id @default(cuid())
+  customerId          String   @unique
+  age                 Int
+  gender              String
+  country             String
+  signupDate          DateTime
+  segment             String   @default("Bronze") // Bronze/Silver/Gold/Platinum
+  lifetimeValue       Float    @default(0)
+  churnScore          Float    @default(0)
+  supportTicketsCount Int      @default(0)
+  avgReviewScore      Float    @default(0)
+  preferredCategory   String?
+  
+  // RFM metrics for segmentation
+  recencyDays         Int      @default(0)
+  frequency30d        Int      @default(0)
+  monetary90d         Float    @default(0)
+  
+  // Additional features for ML
+  daysSinceLastPurchase Int    @default(0)
+  categoryDiversityScore Float @default(0)
+  discountDependencyRatio Float @default(0)
+  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  
+  @@index([segment])
+  @@index([churnScore])
+}
+
+model Review {
+  id              String   @id @default(cuid())
+  reviewId        String   @unique
+  customerId      String
+  productId       String
+  rating          Int      // 1-5
+  reviewText      String
+  sentimentLabel  String   @default("neutral") // pos/neg/neutral
+  sentimentScore  Float    @default(0)
+  reviewDate      DateTime
+  
+  createdAt       DateTime @default(now())
+  
+  @@index([productId])
+  @@index([reviewDate])
+  @@index([sentimentLabel])
+}
+
+model StockHistory {
+  id              String   @id @default(cuid())
+  productId       String
+  date            DateTime
+  stockLevel      Int
+  unitsSold       Int
+  unitsRestocked  Int      @default(0)
+  stockoutFlag    Boolean  @default(false)
+  overstockFlag   Boolean  @default(false)
+  holdingCost     Float    @default(0)
+  
+  @@unique([productId, date])
+  @@index([productId])
+  @@index([date])
+}
+
+model MLModelRegistry {
+  id              String   @id @default(cuid())
+  modelId         String   @unique
+  modelName       String
+  version         String
+  trainedAt       DateTime
+  accuracyMetric  String
+  metricValue     Float
+  isActive        Boolean  @default(true)
+  metadata        String?  // JSON blob for additional metrics
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model AnomalyEvent {
+  id                  String   @id @default(cuid())
+  date                DateTime
+  anomalyType         String   // revenue_spike/drop/stockout_cascade/return_surge
+  severity            Int      // 1-10
+  deviationPct        Float
+  affectedCategories  String   // JSON array
+  autoResolved        Boolean  @default(false)
+  rootCause           String?
+  
+  createdAt           DateTime @default(now())
+  
+  @@index([date])
+  @@index([anomalyType])
+}
+
+model RevenueForecast {
+  id                  String   @id @default(cuid())
+  date                DateTime
+  modelType           String   // arima/lstm
+  predictedRevenue    Float
+  lowerBound          Float
+  upperBound          Float
+  confidenceScore     Float
+  actualRevenue       Float?
+  
+  @@unique([date, modelType])
+  @@index([date])
+}
+
+model CustomerSegment {
+  id                  String   @id @default(cuid())
+  clusterId           Int
+  label               String   // Champions/Loyal/At-Risk/Hibernating/Lost
+  customerCount       Int
+  avgLtv              Float
+  avgChurnScore       Float
+  revenueSharePct     Float
+  centroidX           Float    // UMAP coordinate
+  centroidY           Float    // UMAP coordinate
+  
+  updatedAt           DateTime @updatedAt
+}
+
+model DailyKPI {
+  id                  String   @id @default(cuid())
+  date                DateTime @unique
+  totalRevenue        Float
+  totalTransactions   Int
+  avgOrderValue       Float
+  uniqueCustomers     Int
+  returnRate          Float
+  stockoutEvents      Int
+  anomalyCount        Int
+  
+  createdAt           DateTime @default(now())
+}
+
+// Cache for computed metrics
+model CachedMetric {
+  id                  String   @id @default(cuid())
+  key                 String   @unique
+  value               String   // JSON blob
+  computedAt          DateTime @default(now())
+  expiresAt           DateTime
+  
+  @@index([expiresAt])
+}
