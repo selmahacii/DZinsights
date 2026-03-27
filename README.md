@@ -1,6 +1,6 @@
 # DZinsights
 
-![Version](https://img.shields.io/badge/version-0.2.0-blue)
+
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 DZinsights is a high-performance Business Intelligence (BI) platform tailored for the Algerian e-commerce market. It provides real-time predictive analytics, demand forecasting, and customer intelligence driven by advanced Machine Learning models.
